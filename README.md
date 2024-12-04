@@ -22,14 +22,6 @@ O **TC_Embrapa_Finanças** é um sistema desenvolvido em Python que emprega rede
 - Previsão de valores de fechamento de ações da NVIDIA utilizando redes LSTM.
 - Suporte para operações de day trade com previsões baseadas em dados históricos.
 
-### Exemplos de uso
-
-(aguardando o código para detalhamento dos exemplos)
-
----
-
-Quando tiver o código ou mais detalhes das funcionalidades, posso complementar e formatar a seção de exemplos de uso! 😊
-
 ## Uso
 
 O projeto utiliza Streamlit para criar uma interface interativa, permitindo que os usuários insiram dados de entrada, vejam previsões geradas pelo modelo LSTM e acompanhem o histórico de entradas e saídas.
