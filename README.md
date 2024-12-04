@@ -15,8 +15,6 @@ O **TC_Embrapa_Finanças** é um sistema desenvolvido em Python que emprega rede
 
 - Python 3.12 ou superior
 
-## Uso
-
 ### Funcionalidades principais
 
 - Previsão de valores de fechamento de ações da NVIDIA utilizando redes LSTM.
