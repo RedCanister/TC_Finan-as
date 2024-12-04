@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import time
 import psutil
+from psutil import cpu_percent, virtual_memory
 import torch
 from sklearn.preprocessing import MinMaxScaler
 from structure import Attention, LSTMModel
