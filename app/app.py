@@ -6,6 +6,10 @@ import time
 import psutil
 import torch
 
+from sklearn.preprocessing import MinMaxScaler
+from model import Attention, LSTMModel
+
+
 # Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Open', 'High', 'Low', 'Prediction'])
@@ -15,9 +19,9 @@ if 'history' not in st.session_state:
 def load_model_and_scaler():
     """Carrega o modelo pré-treinado e o scaler."""
     try:
-        with open('modelos/LSTM_treinado_modelo.pkl', 'rb') as file:
+        with open('LSTM_treinado_modelo.pkl', 'rb') as file:
             model = pickle.load(file)
-        with open('modelos/LSTM_scaler.pkl', 'rb') as scaler_file:
+        with open('LSTM_scaler.pkl', 'rb') as scaler_file:
             scaler = pickle.load(scaler_file)
         model.eval()  # Garante que o modelo está em modo de avaliação
         return model, scaler
