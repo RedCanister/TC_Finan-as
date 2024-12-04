@@ -7,6 +7,8 @@ import psutil
 import torch
 import os
 
+from model import Attention, LSTMModel
+
 # Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Open', 'High', 'Low', 'Prediction'])
