@@ -50,10 +50,10 @@ if submit_button:
     st.write(user_input_variables)
 
     # Carregar o modelo salvo com pickle
-    with open('modelos\LSTM_treinado_modelo.pkl', 'rb') as file:
+    with open('LSTM_treinado_modelo.pkl', 'rb') as file:
         model = pickle.load(file)
 
-    with open('modelos\LSTM_scaler.pkl', 'rb') as scaler_file:
+    with open('LSTM_scaler.pkl', 'rb') as scaler_file:
         scaler = pickle.load(scaler_file)
 
     # Colocar o modelo em modo de avaliação
