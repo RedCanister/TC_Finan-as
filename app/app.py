@@ -11,17 +11,21 @@ import os
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Open', 'High', 'Low', 'Prediction'])
 
+# Registrando o diretório atual do script
+base_dir = os.path.dirname(__file__)
+
+# Construa o caminho absoluto até o modelo e o scaler
+model_path = os.path.join(base_dir, 'LSTM_treinado_modelo.pkl')
+
+scaler_path = os.path.join(base_dir, 'LSTM_scaler.pkl')
+
+#model_path = r"modelos/LSTM_treinado_modelo.pkl"
+#scaler_path = r"modelos/LSTM_scaler.pkl"
 
 @st.cache_resource
 def load_model_and_scaler():
     """Carrega o modelo pré-treinado e o scaler."""
-    # Registrando o diretório atual do script
-    base_dir = os.path.dirname(__file__)
-
-    # Construa o caminho absoluto até o modelo e o scaler
-    model_path = os.path.join(base_dir, 'modelos', 'LSTM_treinado_modelo.pkl')
-    scaler_path = os.path.join(base_dir, 'modelos', 'LSTM_scaler.pkl')
-
+    
     try:
         with open(model_path, 'rb') as file:
             model = pickle.load(file)
