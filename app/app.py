@@ -4,34 +4,33 @@ import pickle
 import numpy as np
 import time
 import psutil
-from psutil import cpu_percent, virtual_memory
 import torch
 from sklearn.preprocessing import MinMaxScaler
 from structure import Attention, LSTMModel
 
 
-# Initialize Streamlit session state
+# Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Open', 'High', 'Low', 'Prediction'])
 
 
 @st.cache_resource
 def load_model_and_scaler():
-    """Loads the pretrained model and scaler."""
+    """Carrega o modelo pré-treinado e o scaler."""
     try:
-        with open('LSTM_treinado_modelo.pkl', 'rb') as file:
+        with open('modelos/LSTM_treinado_modelo.pkl', 'rb') as file:
             model = pickle.load(file)
-        with open('LSTM_scaler.pkl', 'rb') as scaler_file:
+        with open('modelos/LSTM_scaler.pkl', 'rb') as scaler_file:
             scaler = pickle.load(scaler_file)
-        model.eval()  # Ensure the model is in evaluation mode
+        model.eval()  # Garante que o modelo está em modo de avaliação
         return model, scaler
     except FileNotFoundError as e:
-        st.error(f"Error loading model or scaler: {e}")
+        st.error(f"Erro ao carregar o modelo ou scaler: {e}")
         return None, None
 
 
 def get_user_data():
-    """Collects user inputs via the sidebar."""
+    """Coleta os dados de entrada do usuário pela barra lateral."""
     open_price = st.sidebar.number_input('Open', min_value=0.0, max_value=10000.0, value=0.0, step=0.1)
     high_price = st.sidebar.number_input('High', min_value=0.0, max_value=10000.0, value=0.0, step=0.1)
     low_price = st.sidebar.number_input('Low', min_value=0.0, max_value=10000.0, value=0.0, step=0.1)
@@ -39,17 +38,17 @@ def get_user_data():
 
 
 def prepare_data(user_input, scaler):
-    """Prepares and scales the input data."""
+    """Prepara e escala os dados de entrada."""
     raw_input = [[user_input['Open'][0], user_input['High'][0], user_input['Low'][0], 0]]
     scaled_input = scaler.transform(raw_input)
     sequence_input = torch.tensor(scaled_input).repeat(20, 1).unsqueeze(0).float()
-    scaled_high = sequence_input[:, :, 1:2]
-    scaled_low = sequence_input[:, :, 2:3]
+    scaled_high = sequence_input[:, :, 1:2]  # Extrai a coluna "High" da sequência escalada
+    scaled_low = sequence_input[:, :, 2:3]   # Extrai a coluna "Low" da sequência escalada
     return sequence_input, scaled_high, scaled_low
 
 
 def predict_price(model, sequence_input, scaled_high, scaled_low, scaler):
-    """Generates price prediction using the trained model."""
+    """Gera a previsão de preço usando o modelo treinado."""
     with torch.no_grad():
         prediction, _ = model(sequence_input, scaled_high, scaled_low)
     predictions_numpy = prediction.squeeze(-1).detach().numpy().reshape(-1, 1)
@@ -59,53 +58,53 @@ def predict_price(model, sequence_input, scaled_high, scaled_low, scaler):
 
 
 def monitor_system():
-    """Monitors system metrics."""
+    """Monitora métricas do sistema."""
     cpu_percent = psutil.cpu_percent(interval=0.1)
     memory_percent = psutil.virtual_memory().percent
     return cpu_percent, memory_percent
 
 
-# Main Streamlit UI
-st.title("📈 NVIDIA Stock Price Prediction")
-st.sidebar.title("Enter Data")
+# Interface principal do Streamlit
+st.title("📈 Previsão do Preço das Ações da NVIDIA")
+st.sidebar.title("Insira os Dados")
 
-# Load model and scaler
+# Carrega o modelo e o scaler
 model, scaler = load_model_and_scaler()
 if model is None or scaler is None:
     st.stop()
 
-# Get user input
+# Obtém os dados do usuário
 user_input_variables = get_user_data()
-if st.sidebar.button('Predict'):
-    st.subheader("User Input Data:")
+if st.sidebar.button('Prever'):
+    st.subheader("Dados de Entrada do Usuário:")
     st.write(user_input_variables)
 
-    # Measure runtime
+    # Mede o tempo de execução
     start_time = time.time()
 
-    # Prepare data and predict
+    # Prepara os dados e faz a previsão
     try:
         sequence_input, scaled_high, scaled_low = prepare_data(user_input_variables, scaler)
         predictions = predict_price(model, sequence_input, scaled_high, scaled_low, scaler)
         prediction_value = predictions[0]
         user_input_variables['Prediction'] = prediction_value
 
-        # Update session history
+        # Atualiza o histórico da sessão
         st.session_state.history = pd.concat([st.session_state.history, user_input_variables], ignore_index=True)
 
-        st.subheader("📊 Prediction:")
+        st.subheader("📊 Previsão:")
         st.write(prediction_value)
 
-        st.subheader("Updated Data Table:")
+        st.subheader("Tabela Atualizada:")
         st.write(st.session_state.history)
 
-        # Runtime and monitoring
+        # Tempo de execução e monitoramento
         runtime = time.time() - start_time
         cpu_usage, memory_usage = monitor_system()
-        st.sidebar.subheader("⚙️ System Monitoring")
-        st.sidebar.write(f"Runtime: {runtime:.2f} seconds")
-        st.sidebar.write(f"CPU Usage: {cpu_usage}%")
-        st.sidebar.write(f"Memory Usage: {memory_usage}%")
+        st.sidebar.subheader("⚙️ Monitoramento do Sistema")
+        st.sidebar.write(f"Tempo de Execução: {runtime:.2f} segundos")
+        st.sidebar.write(f"Uso de CPU: {cpu_usage}%")
+        st.sidebar.write(f"Uso de Memória: {memory_usage}%")
 
     except Exception as e:
-        st.error(f"An error occurred during prediction: {e}")
+        st.error(f"Ocorreu um erro durante a previsão: {e}")
