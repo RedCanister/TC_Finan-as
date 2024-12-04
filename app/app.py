@@ -6,9 +6,6 @@ import time
 import psutil
 import torch
 
-from sklearn.preprocessing import MinMaxScaler
-from model import Attention, LSTMModel
-
 
 # Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
