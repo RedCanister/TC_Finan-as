@@ -28,7 +28,7 @@ O projeto utiliza Streamlit para criar uma interface interativa, permitindo que 
 
 - **Interface interativa:**  
   Usuários podem inserir os valores de `Open`, `High` e `Low` na barra lateral.
-  [TC_Embrapa_Finanças - Interface](https://tcfinancas-nvidia.streamlit.app/)
+  [TC_Embrapa_Finanças - Interface](https://tcfinancas-nvidia-pred.streamlit.app/)
   
 - **Previsão do preço de fechamento:**  
   Com base nos dados fornecidos, o modelo LSTM realiza previsões para o preço de fechamento (`Close`) das ações da NVIDIA.
