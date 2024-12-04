@@ -5,7 +5,7 @@ import numpy as np
 import time
 import psutil
 import torch
-
+import os
 
 # Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
@@ -15,10 +15,17 @@ if 'history' not in st.session_state:
 @st.cache_resource
 def load_model_and_scaler():
     """Carrega o modelo pré-treinado e o scaler."""
+    # Registrando o diretório atual do script
+    base_dir = os.path.dirname(__file__)
+
+    # Construa o caminho absoluto até o modelo e o scaler
+    model_path = os.path.join(base_dir, 'modelos', 'LSTM_treinado_modelo.pkl')
+    scaler_path = os.path.join(base_dir, 'modelos', 'LSTM_scaler.pkl')
+
     try:
-        with open('LSTM_treinado_modelo.pkl', 'rb') as file:
+        with open(model_path, 'rb') as file:
             model = pickle.load(file)
-        with open('LSTM_scaler.pkl', 'rb') as scaler_file:
+        with open(scaler_path, 'rb') as scaler_file:
             scaler = pickle.load(scaler_file)
         model.eval()  # Garante que o modelo está em modo de avaliação
         return model, scaler
