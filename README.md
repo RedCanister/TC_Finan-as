@@ -39,7 +39,7 @@ O projeto utiliza Streamlit para criar uma interface interativa, permitindo que 
 - `GET /`: Redireciona para a interface.
 
 - **Entrada de dados:**  
-  Os valores `Open`, `High` e `Low` são inseridos via barra lateral, com validação e escalonamento dos valores.
+  Os valores `Open`, `High` e `Low` são inseridos via barra lateral.
 
 - **Modelo LSTM carregado dinamicamente:**  
   O modelo e o escalador (`scaler`) são carregados usando `pickle` para realizar previsões em tempo real.
