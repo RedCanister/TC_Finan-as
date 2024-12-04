@@ -6,10 +6,6 @@ import time
 import psutil
 import torch
 
-from sklearn.preprocessing import MinMaxScaler
-from app.model import Attention, LSTMModel
-
-
 # Inicializa o estado de sessão do Streamlit
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Open', 'High', 'Low', 'Prediction'])
