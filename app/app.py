@@ -5,8 +5,9 @@ import numpy as np
 import time
 import psutil
 import torch
+
 from sklearn.preprocessing import MinMaxScaler
-from structure import Attention, LSTMModel
+from app.model import Attention, LSTMModel
 
 
 # Inicializa o estado de sessão do Streamlit
