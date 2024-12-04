@@ -18,9 +18,9 @@ if 'history' not in st.session_state:
 def load_model_and_scaler():
     """Loads the pretrained model and scaler."""
     try:
-        with open('modelos/LSTM_treinado_modelo.pkl', 'rb') as file:
+        with open('LSTM_treinado_modelo.pkl', 'rb') as file:
             model = pickle.load(file)
-        with open('modelos/LSTM_scaler.pkl', 'rb') as scaler_file:
+        with open('LSTM_scaler.pkl', 'rb') as scaler_file:
             scaler = pickle.load(scaler_file)
         model.eval()  # Ensure the model is in evaluation mode
         return model, scaler
